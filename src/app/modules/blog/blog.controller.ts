@@ -8,18 +8,18 @@ const createBlog = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Blog is created successfully',
+    message: 'Blog created successfully',
     data: result,
   });
 });
 
 const getAllBlogs = catchAsync(async (req, res) => {
-  const result = await BlogServices.getAllBlogsFromDB();
+  const result = await BlogServices.getAllBlogsFromDB(req.query);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Blogs are retrieved successfully',
+    message: 'Blogs fetched successfully',
     data: result,
   });
 });
