@@ -18,7 +18,7 @@ const loginUser = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'User is logged in successfully!',
+    message: 'Login successful',
     data: result,
   });
 });
