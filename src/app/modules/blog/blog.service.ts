@@ -34,7 +34,7 @@ const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
   }
   const result = await Blog.findOneAndUpdate({ _id: id }, payload, {
     new: true,
-  });
+  }).populate('author');
   return result;
 };
 
