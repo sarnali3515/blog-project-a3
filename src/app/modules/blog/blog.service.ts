@@ -1,4 +1,5 @@
 import QueryBuilder from '../../builder/QueryBuilder';
+import AppError from '../../errors/AppError';
 import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
 
@@ -18,14 +19,36 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 const getSingleBlogFromDB = async (id: string) => {
+  const isBlogExists = await Blog.findById(id);
+  if (!isBlogExists) {
+    throw new AppError(404, 'Blog does not exist');
+  }
   const result = await Blog.findById(id).populate('author');
   return result;
 };
 
 const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
+  const isBlogExists = await Blog.findById(id);
+  if (!isBlogExists) {
+    throw new AppError(404, 'Blog does not exist');
+  }
   const result = await Blog.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });
+  return result;
+};
+
+const deleteBlogIntoDB = async (id: string) => {
+  const isBlogExists = await Blog.findById(id);
+  if (!isBlogExists) {
+    throw new AppError(404, 'Blog does not exist');
+  }
+  const result = await Blog.findByIdAndDelete(
+    { _id: id },
+    {
+      new: true,
+    },
+  );
   return result;
 };
 
@@ -34,4 +57,5 @@ export const BlogServices = {
   getAllBlogsFromDB,
   getSingleBlogFromDB,
   updateBlogIntoDB,
+  deleteBlogIntoDB,
 };
