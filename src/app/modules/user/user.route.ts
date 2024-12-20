@@ -11,7 +11,11 @@ router.post(
   validateRequest(UserValidation.createUserValidationSchema),
   UserControllers.createUser,
 );
-
+router.post(
+  '/login',
+  validateRequest(UserValidation.loginValidationSchema),
+  UserControllers.loginUser,
+);
 router.get('/users', UserControllers.getAllUsers);
 
 router.get('/users/:id', UserControllers.getSingleUser);
