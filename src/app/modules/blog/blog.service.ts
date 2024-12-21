@@ -6,11 +6,20 @@ import { Blog } from './blog.model';
 const createBlogIntoDB = async (payload: TBlog, authorId: string) => {
   const blogPayload = { ...payload, author: authorId };
   const result = await Blog.create(blogPayload);
-  return result.populate('author');
+  return result.populate({
+    path: 'author',
+    select: 'name email _id',
+  });
 };
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
-  const blogQuery = new QueryBuilder(Blog.find().populate('author'), query)
+  const blogQuery = new QueryBuilder(
+    Blog.find().populate({
+      path: 'author',
+      select: 'name email _id',
+    }),
+    query,
+  )
     .search(['title', 'content'])
     .filter()
     .sort();
@@ -23,7 +32,10 @@ const getSingleBlogFromDB = async (id: string) => {
   if (!isBlogExists) {
     throw new AppError(404, 'Blog does not exist');
   }
-  const result = await Blog.findById(id).populate('author');
+  const result = await Blog.findById(id).populate({
+    path: 'author',
+    select: 'name email _id',
+  });
   return result;
 };
 
@@ -34,7 +46,10 @@ const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
   }
   const result = await Blog.findOneAndUpdate({ _id: id }, payload, {
     new: true,
-  }).populate('author');
+  }).populate({
+    path: 'author',
+    select: 'name email _id',
+  });
   return result;
 };
 

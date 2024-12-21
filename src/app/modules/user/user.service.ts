@@ -6,7 +6,8 @@ import jwt from 'jsonwebtoken';
 
 const createUserIntoDB = async (payload: TUser) => {
   const result = await User.create(payload);
-  return result;
+
+  return await User.findById(result._id).select('name email _id');
 };
 
 const loginUser = async (payload: TLoginUser) => {
@@ -20,10 +21,18 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(403, 'This user is blocked !');
   }
 
+  const email = user?.email;
+
+  if (email !== payload.email) {
+    throw new AppError(401, 'Invalid Credentials');
+  }
+
   // // checking if the password is correct
 
-  if (!(await User.isPasswordMatched(payload.password, user?.password))) {
-    throw new AppError(403, 'Password do not match !');
+  const password = user?.password as string;
+
+  if (!(await User.isPasswordMatched(payload.password, password))) {
+    throw new AppError(403, 'Invalid Credentials');
   }
 
   //create token and sent to the  client

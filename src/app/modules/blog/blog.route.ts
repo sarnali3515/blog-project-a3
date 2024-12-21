@@ -25,6 +25,7 @@ router.patch(
   validateRequest(BlogValidation.updateBlogValidationSchema),
   BlogControllers.updateBlog,
 );
+
 router.delete(
   '/:id',
   auth('user'),
