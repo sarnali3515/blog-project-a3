@@ -4,7 +4,7 @@ An Express.js application built with TypeScript and MongoDB for managing blogs a
 
 ## Live Demo
 
-[Blogging Platform - Live URL](#)
+[Blogging Platform - Live URL](https://blog-project-a3.vercel.app/)
 
 ---
 
