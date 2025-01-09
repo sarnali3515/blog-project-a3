@@ -6,10 +6,12 @@ import { Blog } from './blog.model';
 const createBlogIntoDB = async (payload: TBlog, authorId: string) => {
   const blogPayload = { ...payload, author: authorId };
   const result = await Blog.create(blogPayload);
-  return result.populate({
-    path: 'author',
-    select: 'name email _id',
-  });
+  return await Blog.findById(result._id)
+    .populate({
+      path: 'author',
+      select: 'name email _id',
+    })
+    .select('title content author _id');
 };
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
@@ -24,7 +26,7 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     .filter()
     .sort();
 
-  const result = await blogQuery.modelQuery;
+  const result = await blogQuery.modelQuery.select('title content author _id');
   return result;
 };
 const getSingleBlogFromDB = async (id: string) => {
@@ -44,13 +46,15 @@ const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
   if (!isBlogExists) {
     throw new AppError(404, 'Blog does not exist');
   }
-  const result = await Blog.findOneAndUpdate({ _id: id }, payload, {
+  await Blog.findOneAndUpdate({ _id: id }, payload, {
     new: true,
-  }).populate({
-    path: 'author',
-    select: 'name email _id',
   });
-  return result;
+  return await Blog.findById(id)
+    .populate({
+      path: 'author',
+      select: 'name email _id',
+    })
+    .select('title content author _id');
 };
 
 const deleteBlogIntoDB = async (id: string) => {
