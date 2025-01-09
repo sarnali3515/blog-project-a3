@@ -20,27 +20,32 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
       message: 'Something went wrong!',
     },
   ];
+  let stack = err?.stack;
 
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
+    stack = simplifiedError.stack || err.stack;
   } else if (err?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorSources = simplifiedError.errorSources;
+    stack = simplifiedError.stack || err.stack;
   } else if (err?.name === 'CastError') {
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorSources = simplifiedError.errorSources;
+    stack = simplifiedError.stack || err.stack;
   } else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorSources = simplifiedError.errorSources;
+    stack = simplifiedError.stack || err.stack;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err?.message;
@@ -65,7 +70,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     message,
     statusCode,
     error: errorSources,
-    stack: config.NODE_ENV === 'development' ? err?.stack : null,
+    stack: err?.stack,
   });
 };
 

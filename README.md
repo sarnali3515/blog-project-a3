@@ -61,7 +61,6 @@ npm install
 
 ```bash
 PORT=5000
-NODE_ENV = development
 DATABASE_URL=mongodb+srv://<username>:<password>@cluster0.sgvl42h.mongodb.net/blog-a3?retryWrites=true&w=majority&appName=Cluster0
 BCRYPT_SALT_ROUNDS = <rounds>
 JWT_ACCESS_SECRET=<your secret code>

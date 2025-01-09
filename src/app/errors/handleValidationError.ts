@@ -20,6 +20,7 @@ const handleValidationError = (
     statusCode,
     message: 'Validation Error',
     errorSources,
+    stack: err.stack,
   };
 };
 

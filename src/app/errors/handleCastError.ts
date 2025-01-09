@@ -17,6 +17,7 @@ const handleCastError = (
     statusCode,
     message: 'Invalid ID',
     errorSources,
+    stack: err.stack,
   };
 };
 

@@ -17,6 +17,7 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
     statusCode,
     message: 'ALready Exist',
     errorSources,
+    stack: err.stack,
   };
 };
 
